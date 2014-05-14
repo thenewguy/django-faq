@@ -51,8 +51,8 @@ class Question(models.Model):
     sort_order = models.IntegerField(_('sort order'), default=0,
         help_text=_('The order you would like the question to be displayed.'))
 
-    created_on = models.DateTimeField(_('created on'), default=datetime.datetime.now)
-    updated_on = models.DateTimeField(_('updated on'))
+    created_on = models.DateTimeField(_('created on'), auto_now_add=True)
+    updated_on = models.DateTimeField(_('updated on'), auto_now=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('created by'),
         null=True, related_name="+")
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('updated by'),
@@ -69,9 +69,6 @@ class Question(models.Model):
         return self.text
 
     def save(self, *args, **kwargs):
-        # Set the date updated.
-        self.updated_on = datetime.datetime.now()
-        
         # Create a unique slug, if needed.
         if not self.slug:
             suffix = 0
